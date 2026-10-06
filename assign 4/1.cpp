@@ -94,15 +94,5 @@ int main() {
     printList(head);
     std::cout<<"\n";
 
-    
-    
-
-
-
-
-
-    
-
-
     return 0;
 }
