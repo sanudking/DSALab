@@ -1,45 +1,58 @@
 #include <iostream>
-#include <vector>
 using namespace std;
 
-struct Tree {
+struct Node {
     int val;
-    Tree* left;
-    Tree* right;
-    
-    Tree(int x) {
-        val = x;
-        left = NULL;
-        right = NULL;
+    Node* next;
+    Node(int val) : val(val), next(NULL) {}
+};
+
+class Solution {
+public:
+    void reversingLL(Node* &head) {
+        Node* temp = head;
+        Node* prev = NULL;
+
+        if(!head->next) return;
+
+        Node* next = head->next;
+
+        while(temp->next) {
+            temp->next = prev;
+            prev = temp;
+            temp = next;
+            next = next->next;
+        }
+
+        temp->next = prev;
+        head = temp;
     }
 };
 
-void inorder(Tree* root, vector<int>& elements) {
-    if (root == nullptr) return;
-    inorder(root->left, elements);
-    elements.push_back(root->val);
-    inorder(root->right, elements);
+void printLL(Node* head) {
+    Node* temp = head;
+
+    while(temp) {
+        cout << temp->val << " ";
+        temp = temp->next;
+    }
+
+    cout << endl;
 }
 
 int main() {
-    Tree* root = new Tree(5);
-    root->left = new Tree(3);
-    root->right = new Tree(7);
-    root->left->left = new Tree(2);
-    root->left->right = new Tree(4);
-    root->right->left = new Tree(6);
-    root->right->right = new Tree(8);
+    Node* head = new Node(10);
+    Node* temp = head;
+    int nums[5] = {3, 7, 9, 6, 2};
 
-    int k = 2;
+    for(int i = 0; i < 5; i++) {
+        temp->next = new Node(nums[i]);
+        temp = temp->next;
+    }
 
-    vector<int> elements;
-    inorder(root, elements);
-    
-    int n = elements.size();
-    int kthSmallest = elements[k - 1];
-    int kthLargest = elements[n - k];
-    
-    cout << kthSmallest << " " << kthLargest << endl;
+    Solution s;
+    s.reversingLL(head);
+    printf("\nReversed Linked list is:\n");
 
-    return 0;
+    printLL(head);
 }

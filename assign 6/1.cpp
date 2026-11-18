@@ -1,43 +1,70 @@
 #include <iostream>
+
 using namespace std;
-struct Tree{
-    
+
+struct Node {
     int val;
-    Tree*left;
-    Tree*right;
-    
-    Tree(int x){
-        val=x;
-        left=NULL;
-        right=NULL;
+    Node* next;
+    Node(int val) : val(val), next(NULL) {}
+};
+
+class Solution {
+public:
+    void reversingCLL(Node* &head) {
+        Node* temp = head;
+        if(head->next == head) return;
+
+        Node* prev = head->next;
+        while(prev->next != head) prev = prev->next;
+
+        Node* next = head->next;
+
+        while(next != head) {
+            temp->next = prev;
+            prev = temp;
+            temp = next;
+            next = next->next;
+        }
+
+        temp->next = prev;
+        head = temp;
     }
 };
-bool isMirror(Tree* tl,Tree* tr){
-    if(tr==nullptr && tl==nullptr) return true;
-    if(tr==nullptr || tl ==nullptr) return false;
-    return (tl->val==tr->val) && isMirror(tl->left,tr->right) && isMirror(tl->right,tr->left);
 
-}
-bool isSymmetric(Tree*root){
-    if(root==nullptr) return true;
-    return isMirror(root->left,root->right);
-}
-int main() {
-    Tree *root= new Tree(1);
-    root->left = new Tree(2);
-    root->right = new Tree(2);
-    root->left->left = new Tree(37);
-    root->left->right = new Tree(4);
-    root->right->left = new Tree(4);
-    root->right->right = new Tree(3);
-
-    if(isSymmetric(root)){
-        cout<<"\nSymmetric";
-
-    }else{
-        cout<<"\n Not symmetric";
+void printCircularLL(Node* &head) {
+    if(head == NULL) {
+        cout << "List is empty" << endl;
+        return;
     }
 
+    Node* temp = head;
+    while(temp->next != head) {
+        cout << temp->val << " ";
+        temp = temp->next;
+    }
 
-    return 0;
+    cout << temp->val << " " << endl;
+}
+
+int main() {
+    Node* head = new Node(10);
+    Node* temp = head;
+    int nums[5] = {3, 7, 9, 6, 2};
+
+    for(int i = 0; i < 5; i++) {
+        Node* newNode = new Node(nums[i]);
+        temp->next = newNode;
+        temp = temp->next;
+    }
+
+    temp->next = head;
+
+    Solution s;
+    cout << "Original Circular Linked List: ";
+    printCircularLL(head);
+
+    s.reversingCLL(head);
+
+    cout << "Reversed Circular Linked List: ";
+    printCircularLL(head);
 }
